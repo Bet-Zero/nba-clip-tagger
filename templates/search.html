@@ -5,6 +5,7 @@
     <title>Search Clips</title>
     <link rel="stylesheet" href="/static/style.css" />
     <script>
+      const playerNames = {{ players|tojson }};
       function toggleSide(event) {
         document
           .querySelectorAll(".toggle-button")
@@ -38,6 +39,12 @@
           tag.style.display = text.includes(query) ? "block" : "none";
         });
       }
+      window.addEventListener("DOMContentLoaded", () => {
+        enablePlayerSuggestions(
+          document.querySelector('input[name="player"]'),
+          playerNames
+        );
+      });
     </script>
   </head>
   <body>
@@ -194,5 +201,6 @@
     </div>
   </body>
   <script src="{{ url_for('static', filename='taggerData.js') }}"></script>
+  <script src="{{ url_for('static', filename='playerSuggest.js') }}"></script>
   <script src="/static/search.js"></script>
 </html>
