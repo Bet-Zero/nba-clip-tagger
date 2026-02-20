@@ -5,12 +5,19 @@ import subprocess
 import socket
 import time
 
-PROJECT_DIR = "/Volumes/Samsung PSSD T7/NBAFilm/__Tools/clip_tagger_web"
-os.chdir(PROJECT_DIR)
+# Use config for paths instead of hardcoding
+script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, script_dir)
+
+import config
+
+PROJECT_DIR = script_dir
+
 
 def is_port_in_use(port=5000):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect_ex(('localhost', port)) == 0
+
 
 def ensure_flask_running():
     if not is_port_in_use(5000):
@@ -20,9 +27,10 @@ def ensure_flask_running():
                          stderr=subprocess.DEVNULL)
         time.sleep(2)
 
+
 def launch_electron(route):
     electron_path = os.path.join(PROJECT_DIR, "node_modules", ".bin", "electron")
-    main_js = os.path.join(PROJECT_DIR, "electron_app", "main.js")
+    main_js = os.path.join(str(config.ELECTRON_DIR), "main.js")
 
     subprocess.Popen(
         [
@@ -64,5 +72,7 @@ def main():
     else:
         print("Unknown command. Use: nba [tagger|search|watcher]")
 
+
 if __name__ == "__main__":
     main()
+
