@@ -231,4 +231,5 @@ def delete():
     return render_template("close.html")
 
 
-if __name__ == "__main__":    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
