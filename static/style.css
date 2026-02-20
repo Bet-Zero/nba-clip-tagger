@@ -511,3 +511,71 @@ input::placeholder,
 .copy-btn:hover {
   background: #555;
 }
+
+/* Video preview styling */
+.video-preview {
+  margin-bottom: 0.75rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-preview video {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Button row with skip, save, delete */
+.button-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.skip-btn {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease background;
+}
+.skip-btn:hover {
+  background: #555;
+}
+
+.delete-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease background;
+}
+.delete-btn:hover {
+  background: #b91c1c;
+}
+
+/* Keyboard shortcuts hint */
+.keyboard-hints {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  color: #666;
+}
+
+.keyboard-hints span {
+  background: #2c2c2e;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}

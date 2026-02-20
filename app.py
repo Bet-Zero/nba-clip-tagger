@@ -146,6 +146,15 @@ def reveal_list():
     return jsonify({"status": "ok"})
 
 
+@app.route("/preview/<path:filename>")
+def preview_clip(filename):
+    """Serve a clip from the watch folder for preview."""
+    path = config.WATCH_FOLDER / filename
+    if not path.exists():
+        abort(404)
+    return send_file(path)
+
+
 @app.route("/tag")
 def tag_form():
     clip_name = request.args.get("file", "")  # <- match Electron URL ?file=...
@@ -176,6 +185,49 @@ def submit():
     CLIP_STATE["filename"] = ""
     CLIP_STATE["path"] = ""
     # Return small page that closes the Electron window
+    return render_template("close.html")
+
+
+@app.route("/skip", methods=["POST"])
+def skip():
+    """Skip the current clip - move to _Skipped folder."""
+    logging.info("⏭️ Skip requested")
+
+    if CLIP_STATE["path"]:
+        skip_folder = config.BASE_DIR / "_Skipped"
+        skip_folder.mkdir(exist_ok=True)
+        src = Path(CLIP_STATE["path"])
+        dest = skip_folder / src.name
+        # Handle duplicates
+        count = 0
+        while dest.exists():
+            count += 1
+            dest = skip_folder / f"{src.stem}_{count}{src.suffix}"
+        try:
+            shutil.move(str(src), str(dest))
+            logging.info("⏭️ Skipped clip moved to: %s", dest)
+        except Exception as exc:
+            logging.error("Failed to skip clip: %s", exc)
+
+    CLIP_STATE["filename"] = ""
+    CLIP_STATE["path"] = ""
+    return render_template("close.html")
+
+
+@app.route("/delete", methods=["POST"])
+def delete():
+    """Delete the current clip permanently."""
+    logging.info("🗑️ Delete requested")
+
+    if CLIP_STATE["path"]:
+        try:
+            os.remove(CLIP_STATE["path"])
+            logging.info("🗑️ Deleted clip: %s", CLIP_STATE["path"])
+        except Exception as exc:
+            logging.error("Failed to delete clip: %s", exc)
+
+    CLIP_STATE["filename"] = ""
+    CLIP_STATE["path"] = ""
     return render_template("close.html")
 
 
